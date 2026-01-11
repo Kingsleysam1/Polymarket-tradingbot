@@ -52,3 +52,26 @@ If you have Docker installed locally:
 
 *   **Dashboard**: The dashboard is now served directly by the bot on the root URL.
 *   **Security**: Never commit your `.env` file or private keys to GitHub. Use the platform's Environment Variables settings.
+
+## Option 3: Deploy on Fly.io (Advanced)
+
+Fly.io is great for running Docker containers close to users.
+
+### Method A: Via CLI (Easiest)
+1.  Install flyctl: `brew install flyctl` or [download here](https://fly.io/docs/hands-on/install-flyctl/).
+2.  Login: `fly auth login`
+3.  Launch (generates app): `fly launch --no-deploy`
+    *   Select "Yes" to copy configuration.
+    *   Edit the generated `fly.toml` if needed (ensure `auto_stop_machines = false`).
+4.  Set Secrets:
+    ```bash
+    fly secrets set PRIVATE_KEY=... CLOB_API_KEY=... CONTAIN_ID=... # etc
+    ```
+5.  Deploy: `fly deploy`
+
+### Method B: From GitHub (Continuous Deployment)
+1.  On Fly.io dashboard, create an Apps token (or run `fly tokens create deploy -x 999999h`).
+2.  Go to your GitHub Repo -> Settings -> Secrets -> Actions.
+3.  Add `FLY_API_TOKEN` with the token value.
+4.  The provided `.github/workflows/fly-deploy.yml` will automatically deploy when you push to main.
+

@@ -1,0 +1,20 @@
+# fly.toml app configuration file generated for polymarket-bot
+
+app = "polymarket-bot-v1" # You will need to change this to a unique name via 'fly launch' or editing this file
+primary_region = "iad" # Ashburn, Virginia (change as needed)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false # CRITICAL: Prevent Fly from sleeping the bot
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
