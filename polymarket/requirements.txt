@@ -1,0 +1,25 @@
+# Polymarket Market Making Bot Dependencies
+
+# Core trading client
+py-clob-client>=0.17.0
+
+# Async WebSocket support
+websockets>=12.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Async file operations (optional, for state persistence)
+aiofiles>=23.0
+
+# HTTP client (used by py-clob-client)
+httpx>=0.25.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio
+pytest-timeout
+aiohttp
+aiohttp-cors
+pytest-asyncio>=0.21.0
+pytest-timeout>=2.2.0

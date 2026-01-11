@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polymarket Trading Dashboard</title>
+    <meta name="description" content="Real-time analytics dashboard for Polymarket market making bot">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">P</div>
+                <span class="logo-text">Polymarket<br><small>MM Bot</small></span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-section="overview">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                </svg>
+                <span>Overview</span>
+            </a>
+            <a href="#" class="nav-item" data-section="trades">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+                </svg>
+                <span>Trades</span>
+            </a>
+            <a href="#" class="nav-item" data-section="positions">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+                <span>Positions</span>
+            </a>
+            <a href="#" class="nav-item" data-section="analytics">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Analytics</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="bot-status">
+                <span class="status-indicator online"></span>
+                <span class="status-text">Bot Running</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="page-title">Dashboard Overview</h1>
+                <span class="last-updated">Last updated: <span id="lastUpdated">--</span></span>
+            </div>
+            <div class="header-right">
+                <div class="trading-mode paper">
+                    <span class="mode-indicator"></span>
+                    <span id="tradingMode">Paper Trading</span>
+                </div>
+                <button class="btn-refresh" id="refreshBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23,4 23,10 17,10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Summary Cards -->
+        <section class="summary-cards">
+            <div class="card stat-card">
+                <div class="card-icon pnl">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Total P&L</span>
+                    <span class="card-value" id="totalPnl">$0.00</span>
+                    <span class="card-change positive" id="pnlChange">+0.00%</span>
+                </div>
+            </div>
+            <div class="card stat-card">
+                <div class="card-icon volume">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Trading Volume</span>
+                    <span class="card-value" id="totalVolume">$0.00</span>
+                    <span class="card-change" id="volumeChange">0 trades</span>
+                </div>
+            </div>
+            <div class="card stat-card">
+                <div class="card-icon rebates">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                        <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                        <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Maker Rebates</span>
+                    <span class="card-value" id="totalRebates">$0.00</span>
+                    <span class="card-change positive">0.10% rate</span>
+                </div>
+            </div>
+            <div class="card stat-card">
+                <div class="card-icon positions">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Active Positions</span>
+                    <span class="card-value" id="activePositions">0</span>
+                    <span class="card-change" id="marketsActive">0 markets</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Row -->
+        <section class="charts-row">
+            <div class="card chart-card large">
+                <div class="card-header">
+                    <h3>P&L Over Time</h3>
+                    <div class="chart-controls">
+                        <button class="chart-btn active" data-range="1h">1H</button>
+                        <button class="chart-btn" data-range="24h">24H</button>
+                        <button class="chart-btn" data-range="7d">7D</button>
+                        <button class="chart-btn" data-range="all">All</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="pnlChart"></canvas>
+                </div>
+            </div>
+            <div class="card chart-card">
+                <div class="card-header">
+                    <h3>Volume by Outcome</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="volumeChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trade History & Positions -->
+        <section class="data-row">
+            <div class="card table-card">
+                <div class="card-header">
+                    <h3>Recent Trades</h3>
+                    <div class="table-controls">
+                        <select id="tradeFilter" class="select-filter">
+                            <option value="all">All Trades</option>
+                            <option value="buy">Buys Only</option>
+                            <option value="sell">Sells Only</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="tradesTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Market</th>
+                                <th>Side</th>
+                                <th>Outcome</th>
+                                <th>Price</th>
+                                <th>Size</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tradesBody">
+                            <tr class="empty-row">
+                                <td colspan="7">No trades yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card positions-card">
+                <div class="card-header">
+                    <h3>Current Positions</h3>
+                </div>
+                <div class="positions-list" id="positionsList">
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                        </svg>
+                        <p>No active positions</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Feed -->
+        <section class="activity-section">
+            <div class="card activity-card">
+                <div class="card-header">
+                    <h3>Activity Feed</h3>
+                    <span class="live-indicator">
+                        <span class="pulse"></span>
+                        Live
+                    </span>
+                </div>
+                <div class="activity-feed" id="activityFeed">
+                    <div class="activity-item">
+                        <span class="activity-time">--:--</span>
+                        <span class="activity-message">Waiting for bot activity...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

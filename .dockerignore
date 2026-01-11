@@ -1,0 +1,10 @@
+.env
+.venv
+__pycache__
+.git
+.DS_Store
+*.pyc
+polymarket/__pycache__
+polymarket/.env
+polymarket/.pytest_cache
+dashboard/.DS_Store
